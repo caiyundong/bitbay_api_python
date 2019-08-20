@@ -49,7 +49,7 @@ class Bitbay():
         return str(uuid.uuid4())
 
     ### Trading
-    def create_order(self, symbol, amount, rate, price, offerType, mode, postOnly=True, fillOrKill=False):
+    def create_order(self, symbol, amount, rate=None, price=None, offerType='buy', mode='limit', postOnly=True, fillOrKill=False, firstBalanceId=None, secondBalanceId=None):
         """
         New order
         :param symbol:          BTC-PLN
@@ -62,8 +62,12 @@ class Bitbay():
         :param fillOrKill:
         :return:
         """
-        request = {"amount": amount, "rate": rate, "price": price, "offerType": offerType, "mode": mode, "postOnly": postOnly, "filllOrKill": fillOrKill}
+        if mode == 'limit':
+            request = {"amount": amount, "rate": rate, "offerType": offerType, "mode": mode, "postOnly": postOnly, "filllOrKill": fillOrKill}
+        else:
+            request = {"amount": amount, "price": price, "offerType": offerType, "mode": mode, "postOnly": postOnly, "filllOrKill": fillOrKill}
         response = self.query_private("POST", URL + "/trading/offer/%s" % symbol, req=request)
+        print(URL + "/trading/offer/%s" % symbol, request)
         return response
 
     def get_active_orders(self, symbol=None):
@@ -304,7 +308,13 @@ class Bitbay():
 
 
 if __name__ == '__main__':
+
     bitbay = Bitbay(api_key="",api_secret="")
+    order = bitbay.create_order('BTC-USD', amount=1, rate=100, offerType='buy', mode='limit')
+    print(order)
+    result = bitbay.cancel_order('BTC-USD', '82ca35da-6eeb-4f30-91bb-165fdcf4d8b2', 'buy', 4000);
+    print(result)
+    print(bitbay.get_active_orders())
     # print(bitbay.get_symbols())
     # print(bitbay.get_ticker("BTC-PLN"))
     # print(bitbay.get_orderbook('BTC-PLN'))

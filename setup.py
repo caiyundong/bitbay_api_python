@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="python-bitbay",
-    version="0.0.4",
+    version="0.0.5",
     author="Cai Yundong",
     author_email="yundong.cai@gmail.com",
     description="Bitbay Exchange API python implementation for automated trading",
