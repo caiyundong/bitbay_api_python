@@ -1,5 +1,4 @@
 # BitBay REST API for Python3
-
 See full description at https://docs.bitbay.net/v1.0.1-en/reference
 
 ## Installation
@@ -10,17 +9,17 @@ See full description at https://docs.bitbay.net/v1.0.1-en/reference
 
 ## Usage
 
-The BBA constructor receive public and private key using to authentication.
+The constructor receive public and private key using to authentication.
 ```python
 from python_bitbay import bitbay
 
 bitbay_client = bitbay.Bitbay(api_key='32345f3f-1b1d-1234-a943-a10b1bddfa1b1', api_secret='4d539fe0-e3b0-4e4e-7c86-70b36aa93d4f')
 ```
 
-## Public endpoints
+## Public Endpoints
 
 ```python
-
+# Get ticker
 bitbay_client.get_ticker('BTC-EUR')
 
 # Get orderbook from LSK-PLN market
@@ -33,13 +32,12 @@ bitbay_client.get_trades('BTC-USD', limit=10, fromTime=1531407461)
 bitbay_client.get_kline(symbol='BTC-PLN', second=1800, fromTime=1544158620, toTime=1544173061)
 ```
 
-## Private endpoints
+## Private Endpoints
 ### Trading
 
 ```python
-
-# We want to buy 1 Bitcoin for 4000$ on BTC-USD market
-bitbay_client.create_order('BTC-USD', amount=1, rate=1, offerType='buy', mode='limit')      # limit
+# Buy 1 Bitcoin for 4000$ on BTC-USD market
+bitbay_client.create_order('BTC-USD', amount=1, rate=4000, offerType='buy', mode='limit')      # limit
 bitbay_client.create_order('BTC-USD', amount=1, price=100, offerType='buy', mode='market')  # market
 
 # Let's get active offers from every market
@@ -55,7 +53,7 @@ bitbay_client.get_config()
 bitbay_client.change_config('BTC-USD', first='455b3f25-8d3a-409f-9fe6-8cc40f1ce533', second='455b3f25-8d3a-509f-9fe6-8cc40f1ce542')
 ```
 
-### Deposit and withdrawal
+### Deposit and Withdrawal
 ```python
 # Get our address to deposit cryptocurrency on specified wallet
 bitbay_client.get_deposit_address(wallet_id='455b3f25-8d3a-409f-9fe6-8cc40f1ce533')
@@ -85,7 +83,7 @@ bitbay_client.get_trade_transactions(markets=['BTC-PLN'], rateFrom=23000, rateTo
 bitbay_client.get_operation_transactions(balanceCurrencies=["XMR"], limit="20", sort=[{"order":"DESC","by":"time"}], nextPageCursor="start")
 ```
 
-### Manage wallets
+### Manage Wallets
 ```python
 # Get balance with list of all wallets
 bitbay_client.get_balance()
@@ -93,7 +91,7 @@ bitbay_client.get_balance()
 # Create a new wallet for Bitcoin
 bitbay_client.create_wallet(currency='BTC', type='crypto', name='trading')
 
-# I think that was a bad name, let's change it
+# Change the wallet name
 bitbay_client.change_wallet_name(wallet_id='455b3f25-8d3a-409f-9fe6-8cc40f1ce533', name='arbitration)
 
 # Send some cryptocurrency over our wallets
@@ -101,6 +99,6 @@ bitbay_client.internal_transfer(source_id='455b3f25-8d3a-409f-9fe6-8cc40f1ce533'
 ```
 
 ## Donate
-If this library helped you out feel free to donate.
+If this library helped you out, feel free to donate.
 
-ETH: 0xAbBeE2d8355310Bf61531DD94C086636194A4a54
+**ETH**: 0xAbBeE2d8355310Bf61531DD94C086636194A4a54
