@@ -14,7 +14,7 @@ The BBA constructor receive public and private key using to authentication.
 ```python
 from python_bitbay import bitbay
 
-bitbay_client = bitbay.Bitbay(api_key='32345f3f-1b1d-1234-a923-a10b1bdba1b1', api_secret='4d539fe0-e3b0-4e4e-7c86-70b36aa93d4f')
+bitbay_client = bitbay.Bitbay(api_key='32345f3f-1b1d-1234-a943-a10b1bddfa1b1', api_secret='4d539fe0-e3b0-4e4e-7c86-70b36aa93d4f')
 ```
 
 ## Public endpoints

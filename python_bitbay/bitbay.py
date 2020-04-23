@@ -23,11 +23,6 @@ class Bitbay():
             postdata = ""
 
         t = int(time.time())
-        # message = urlpath.encode(encoding='utf_8') + hashlib.sha256(s_to_hash.encode(encoding='utf_8')).digest()
-
-        # message = self.api_key + str(t) + postdata
-        # message = urllib.urlencode(req)
-        # message = bytes(json.dumps(req), 'utf8')
         message = self.api_key + str(t) + postdata
         message = message.encode('utf-8')
         signature = hmac.new(self.secret_key.encode('utf-8'), message, hashlib.sha512).hexdigest()
@@ -37,10 +32,9 @@ class Bitbay():
             'operation-id': self.getUUID(),
             'Request-Timestamp': str(t),
             'Content-Type': 'application/json'
-            # 'API-Sign': base64.b64encode(signature.digest())
         }
 
-        r = requests.request(method, url, headers=headers)
+        r = requests.request(method, url, headers=headers, data=postdata)
         rep = r.json()
         return rep
 
@@ -48,7 +42,9 @@ class Bitbay():
         # 16 bytes
         return str(uuid.uuid4())
 
+    """
     ### Trading
+    """
     def create_order(self, symbol, amount, rate=None, price=None, offerType='buy', mode='limit', postOnly=True, fillOrKill=False, firstBalanceId=None, secondBalanceId=None):
         """
         New order
@@ -67,19 +63,24 @@ class Bitbay():
         else:
             request = {"amount": amount, "price": price, "offerType": offerType, "mode": mode, "postOnly": postOnly, "filllOrKill": fillOrKill}
         response = self.query_private("POST", URL + "/trading/offer/%s" % symbol, req=request)
-        print(URL + "/trading/offer/%s" % symbol, request)
         return response
 
     def get_active_orders(self, symbol=None):
+        """
+
+        :param symbol:
+        :return:
+        """
         if symbol:
             response = self.query_private("GET", URL + "/trading/offer/%s" % symbol)
         else:
             response = self.query_private("GET", URL + "/trading/offer")
-        return response['items']
+
+        return response
 
     def cancel_order(self, symbol, offer_id, offer_type, price):
         """
-
+        cancel an existing order
         :param symbol:
         :param offer_id:
         :param offer_type:
@@ -102,10 +103,12 @@ class Bitbay():
         :return:
         """
         request = {"first": first, "second": second}
-        response = self.query_private("POST", URL + "/trading/config/%s" % symbol)
+        response = self.query_private("POST", URL + "/trading/config/%s" % symbol, req=request)
         return response
 
-    #### Deposit/Withdraw
+    """
+    # Deposit/Withdraw
+    """
     def get_deposit_address(self, wallet_id):
         response = self.query_private("GET", URL+"/payments/crypto-address/%s" % wallet_id)
         return response
@@ -145,7 +148,9 @@ class Bitbay():
         response = self.query_private("GET", URL + "/payments/withdrawal/%s/igoria_withdrawal/%s/start" % (wallet_id, symbol), req=request)
         return response
 
+    """
     ### History
+    """
     def get_trade_transactions(self, markets, rateFrom, rateTo, fromTime, toTime, userAction, nextPageCursor):
         """
 
@@ -168,7 +173,9 @@ class Bitbay():
         response = self.query_private("GET", URL + "/balances/BITBAY/history", req=request)
         return response
 
+    """
     ### WALLET
+    """
     def get_balance(self):
         response = self.query_private("GET", URL + "/balances/BITBAY/balance")
         return response
@@ -222,9 +229,9 @@ class Bitbay():
         response = self.query_private("GET", URL + "/fiat_cantor/history", req=request)
         return response
 
-    '''
+    """
     Market data API
-    '''
+    """
 
     def get_symbols(self):
         r = requests.get(URL + '/trading/ticker', verify=True, )
@@ -270,7 +277,6 @@ class Bitbay():
         else:
             url = URL + '/trading/candle/history/%s/%s' % (symbol, seconds)
 
-        print(url)
         r = requests.get(url, verify=True, )
         rep = r.json()
         return rep
@@ -290,9 +296,9 @@ class Bitbay():
             rep = r.json()
             return rep['items']
 
-    # 获取 ticker
     def get_ticker(self, symbol=None):
         """
+        get the ticker
         :param symbol:
         :return:
         """
@@ -308,16 +314,19 @@ class Bitbay():
 
 
 if __name__ == '__main__':
+    bitbay = Bitbay(api_key="xxxxx-xxxx-45aa-a801-e457658e7b2f", api_secret="xxxxx-xxxxx-4a03-8314-0da5996ae649")
 
-    bitbay = Bitbay(api_key="",api_secret="")
+    # private methods
+    print(bitbay.get_balance())
     order = bitbay.create_order('BTC-USD', amount=1, rate=100, offerType='buy', mode='limit')
     print(order)
     result = bitbay.cancel_order('BTC-USD', '82ca35da-6eeb-4f30-91bb-165fdcf4d8b2', 'buy', 4000);
     print(result)
     print(bitbay.get_active_orders())
+
+    # Market Data
     # print(bitbay.get_symbols())
     # print(bitbay.get_ticker("BTC-PLN"))
     # print(bitbay.get_orderbook('BTC-PLN'))
-    # print(bitbay.get_balance())
     # print(bitbay.get_kline(symbol="BTC-USD", seconds=600))
     # print(bitbay.get_trades("BTC-USD"))
