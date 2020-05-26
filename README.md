@@ -102,3 +102,9 @@ bitbay_client.internal_transfer(source_id='455b3f25-8d3a-409f-9fe6-8cc40f1ce533'
 If this library helped you out, feel free to donate.
 
 **ETH**: 0xAbBeE2d8355310Bf61531DD94C086636194A4a54
+
+## Update to PYPI
+```
+python3 setup.py sdist bdist_wheel
+python3 -m twine upload --repository pypi dist/*
+```
