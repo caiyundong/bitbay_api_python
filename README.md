@@ -4,7 +4,7 @@ See full description at https://docs.bitbay.net/v1.0.1-en/reference
 ## Installation
 
 ```bash
-  pip install python-bitbay
+  > pip install python-bitbay
 ```
 
 ## Usage

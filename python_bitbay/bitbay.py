@@ -17,13 +17,16 @@ class Bitbay():
         self.secret_key = api_secret
 
     def query_private(self, method, url, req={}):
-        if req:
-            postdata = json.dumps(req)
-        else:
-            postdata = ""
-
         t = int(time.time())
-        message = self.api_key + str(t) + postdata
+        if method == 'GET':
+            message = self.api_key + str(t)
+        else:
+            if req:
+                postdata = json.dumps(req)
+            else:
+                postdata = ""
+            message = self.api_key + str(t) + postdata
+
         message = message.encode('utf-8')
         signature = hmac.new(self.secret_key.encode('utf-8'), message, hashlib.sha512).hexdigest()
         headers = {
@@ -34,7 +37,10 @@ class Bitbay():
             'Content-Type': 'application/json'
         }
 
-        r = requests.request(method, url, headers=headers, data=postdata)
+        if method == 'GET':
+            r = requests.request(method, url, headers=headers, params=json.dumps(req))
+        else:
+            r = requests.request(method, url, headers=headers, data=postdata)
         rep = r.json()
         return rep
 
@@ -94,8 +100,8 @@ class Bitbay():
         response = self.query_private("GET", URL + "/trading/config/%s" % symbol)
         return response
 
-    def change_config(self, symbol, first, second):
-        """
+    def change_cnfig(self, symbol, first, second):
+        """g
         Change wallet
         :param symbol:
         :param first:       UUID of wallet for first currency.
@@ -115,7 +121,7 @@ class Bitbay():
 
     def generate_deposit_address(self, wallet_id, currency="BTC"):
         request = {"currency": currency}
-        response = self.query_private("POST", URL+"/payments/crypto-address/%s" %wallet_id, req=request)
+        response = self.query_private("POST", URL+"/payments/crypto-address/%s" % wallet_id, req=request)
         return response
 
     def get_address_history(self, wallet_id):
@@ -163,7 +169,8 @@ class Bitbay():
         :param nextPageCursor:  start
         :return:
         """
-        request = {"markets":markets, "rateFrom": rateFrom, 'rateTo':rateTo, "fromTime": fromTime, "toTime": toTime, "userAction": userAction, "nextPageCursor": nextPageCursor}
+        request = {"markets": markets, "rateFrom": rateFrom, 'rateTo': rateTo, "fromTime": fromTime, "toTime": toTime, "userAction": userAction, "nextPageCursor": nextPageCursor}
+
         response = self.query_private("GET", URL + "/trading/history/transactions", req=request)
         return response
 
@@ -314,15 +321,16 @@ class Bitbay():
 
 
 if __name__ == '__main__':
-    bitbay = Bitbay(api_key="xxxxx-xxxx-45aa-a801-e457658e7b2f", api_secret="xxxxx-xxxxx-4a03-8314-0da5996ae649")
+    bitbay = Bitbay(api_key="xxxxx-0874-4a51-b19e-9e7d6eb6f4bf", api_secret="xxxx-73aa-4afa-975e-96c65d822630")
 
     # private methods
     print(bitbay.get_balance())
-    order = bitbay.create_order('BTC-USD', amount=1, rate=100, offerType='buy', mode='limit')
-    print(order)
-    result = bitbay.cancel_order('BTC-USD', '82ca35da-6eeb-4f30-91bb-165fdcf4d8b2', 'buy', 4000);
-    print(result)
-    print(bitbay.get_active_orders())
+    # order = bitbay.create_order('BTC-USD', amount=1, rate=100, offerType='buy', mode='limit')
+    # print(order)
+    # result = bitbay.cancel_order('BTC-USD', '82ca35da-6eeb-4f30-91bb-165fdcf4d8b2', 'buy', 4000);
+    # print(result)
+    # print(bitbay.get_active_orders())
+    print(bitbay.get_trade_transactions(markets=['BTC-USD'], rateFrom='10', rateTo='20', fromTime=None, toTime=None, userAction='Buy', nextPageCursor="start"))
 
     # Market Data
     # print(bitbay.get_symbols())
