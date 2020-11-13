@@ -3,3 +3,4 @@ build/
 dist/
 python_bitbay.egg-info/
 .idea
+test
