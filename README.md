@@ -1,6 +1,9 @@
 # BitBay REST API for Python3
 See full description at https://docs.bitbay.net/v1.0.1-en/reference
 
+## Update History
+0.1.2 - add webscoket implementations
+
 ## Installation
 
 ```bash
