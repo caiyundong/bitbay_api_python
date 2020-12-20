@@ -62,12 +62,14 @@ class Bitbay():
         :param mode:            limit / market
         :param postOnly:
         :param fillOrKill:
+        :param firstBalanceId:
+        :param secondBalanceId:
         :return:
         """
         if mode == 'limit':
-            request = {"amount": amount, "rate": rate, "offerType": offerType, "mode": mode, "postOnly": postOnly, "filllOrKill": fillOrKill}
+            request = {"amount": amount, "rate": rate, "offerType": offerType, "mode": mode, "postOnly": postOnly, "filllOrKill": fillOrKill, "firstBalanceId": firstBalanceId, "secondBalanceId": secondBalanceId}
         else:
-            request = {"amount": amount, "price": price, "offerType": offerType, "mode": mode, "postOnly": postOnly, "filllOrKill": fillOrKill}
+            request = {"amount": amount, "price": price, "offerType": offerType, "mode": mode, "postOnly": postOnly, "filllOrKill": fillOrKill, "firstBalanceId": firstBalanceId, "secondBalanceId": secondBalanceId}
         response = self.query_private("POST", URL + "/trading/offer/%s" % symbol, req=request)
         return response
 
