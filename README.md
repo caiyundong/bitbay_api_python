@@ -53,7 +53,7 @@ bitbay_client.cancel_order('BTC-USD', '82ca35da-6eeb-4f30-91bb-165fdcf4d8b2', 'b
 bitbay_client.get_config()
 
 # Change default wallets to trade on BTC-USD
-bitbay_client.change_config('BTC-USD', first='455b3f25-8d3a-409f-9fe6-8cc40f1ce533', second='455b3f25-8d3a-509f-9fe6-8cc40f1ce542')
+bitbay_client.change_cnfig('BTC-USD', first='455b3f25-8d3a-409f-9fe6-8cc40f1ce533', second='455b3f25-8d3a-509f-9fe6-8cc40f1ce542')
 ```
 
 ### Deposit and Withdrawal
